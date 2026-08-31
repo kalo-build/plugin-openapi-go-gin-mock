@@ -1,0 +1,42 @@
+name: "@kalo-build/plugin-openapi-go-gin-mock"
+displayName: "OpenAPI Go Gin Mock Server"
+description: "Generates a standalone Go mock server with Gin handlers and in-memory storage from an OpenAPI 3.1 specification."
+version: "1.0.0"
+
+input:
+  format: "KA:OA1:YAML1"
+  description: "OpenAPI 3.1 YAML specification"
+  suggestedStore:
+    name: "KA_OA_YAML"
+    type: "localFileSystem"
+    path: "./docs/openapi"
+
+output:
+  format: "KA:OA1:GO_GIN_MOCK1"
+  description: "Generated Go mock server source files (types, store, handlers, routes, main)"
+  suggestedStore:
+    name: "KA_OA_GO_GIN_MOCK"
+    type: "localFileSystem"
+    path: "./generated/mock"
+
+configSchema:
+  specFileName:
+    type: string
+    description: "Name of the OpenAPI spec file to read (default: openapi.yaml)"
+    default: "openapi.yaml"
+  packageName:
+    type: string
+    description: "Go package name for the generated mock server package (default: mock)"
+    default: "mock"
+  modulePath:
+    type: string
+    description: "Go module path for the generated server (default: mock-server)"
+    default: "mock-server"
+  port:
+    type: string
+    description: "Default server port (default: 8081)"
+    default: "8081"
+  idPrefix:
+    type: boolean
+    description: "Generate resource-based ID prefixes like Stripe (e.g. cus_, inv_). Default: true"
+    default: true

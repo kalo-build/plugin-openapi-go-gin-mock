@@ -1,0 +1,372 @@
+openapi: "3.1.0"
+info:
+  title: Stripe Lite API
+  version: 1.0.0
+paths:
+  /v1/customers:
+    get:
+      operationId: list_customers
+      tags:
+        - Customer
+      summary: List customers
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Customer'
+                  has_more:
+                    type: boolean
+                  total:
+                    type: integer
+    post:
+      operationId: create_customer
+      tags:
+        - Customer
+      summary: Create a customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        "201":
+          description: Created customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+  /v1/customers/{id}:
+    get:
+      operationId: get_customer
+      tags:
+        - Customer
+      summary: Get a customer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Customer details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+    put:
+      operationId: update_customer
+      tags:
+        - Customer
+      summary: Update a customer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        "200":
+          description: Updated customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+  /v1/invoices:
+    get:
+      operationId: list_invoices
+      tags:
+        - Invoice
+      summary: List invoices
+      parameters:
+        - name: customer_id
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of invoices
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Invoice'
+                  has_more:
+                    type: boolean
+                  total:
+                    type: integer
+    post:
+      operationId: create_invoice
+      tags:
+        - Invoice
+      summary: Create an invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+      responses:
+        "201":
+          description: Created invoice
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /v1/invoices/{id}:
+    get:
+      operationId: get_invoice
+      tags:
+        - Invoice
+      summary: Get an invoice
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Invoice details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /v1/invoices/{id}/finalize:
+    post:
+      operationId: finalize_invoice
+      tags:
+        - Invoice
+      summary: Finalize an invoice
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Finalized invoice
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /v1/invoices/{id}/void:
+    post:
+      operationId: void_invoice
+      tags:
+        - Invoice
+      summary: Void an invoice
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Voided invoice
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /v1/payments:
+    get:
+      operationId: list_payments
+      tags:
+        - Payment
+      summary: List payments
+      parameters:
+        - name: invoice_id
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of payments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Payment'
+                  has_more:
+                    type: boolean
+                  total:
+                    type: integer
+    post:
+      operationId: create_payment
+      tags:
+        - Payment
+      summary: Create a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+      responses:
+        "201":
+          description: Created payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+  /v1/payments/{id}:
+    get:
+      operationId: get_payment
+      tags:
+        - Payment
+      summary: Get a payment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Payment details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        email:
+          type: string
+        name:
+          type: string
+        metadata:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - id
+        - email
+        - name
+        - created_at
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        customer_id:
+          type: string
+        charge_amount:
+          type: integer
+        currency:
+          type: string
+        status:
+          type: string
+          enum:
+            - open
+            - finalized
+            - paid
+            - void
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - id
+        - customer_id
+        - charge_amount
+        - currency
+        - status
+        - created_at
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        invoice_id:
+          type: string
+        charge_amount:
+          type: integer
+        currency:
+          type: string
+        status:
+          type: string
+          enum:
+            - pending
+            - succeeded
+            - failed
+        payment_method:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - id
+        - invoice_id
+        - charge_amount
+        - currency
+        - status
+        - created_at
+tags:
+  - name: Customer
+    description: Customer operations
+  - name: Invoice
+    description: Invoice operations
+  - name: Payment
+    description: Payment operations
